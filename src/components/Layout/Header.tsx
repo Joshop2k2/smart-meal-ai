@@ -18,7 +18,7 @@ const Header = () => {
   console.log('isMenuOpen: ', isMenuOpen)
 
   return (
-    <div className="flex justify-center bg-[#F9F9F3]">
+    <div className="flex justify-center bg-gradient-to-r from-[#F0F9EE] to-[#F9F9F3]">
       <div className="container">
         <Navbar
           isMenuOpen={isMenuOpen}
