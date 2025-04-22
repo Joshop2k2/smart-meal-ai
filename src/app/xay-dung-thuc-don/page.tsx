@@ -4,6 +4,7 @@ import { Button, Select, SelectItem } from '@nextui-org/react'
 import { useState } from 'react'
 import clsx from 'clsx'
 import Card from './components/card'
+import ButtonActive from './components/buttonActive'
 
 enum Gender {
   Men = 'men',
@@ -15,25 +16,38 @@ const Page = () => {
   const [old, setOld] = useState<number>(23)
   const [weight, setWeight] = useState<number>(65)
   const [height, setHeight] = useState<number>(170)
+  const [meal, setMeal] = useState<number>(3)
+  const [active, setActive] = useState<number>(3)
+  const [gold, setGold] = useState<string>('giam-mo')
+  console.log('gold: ', gold)
 
   const targets = [
     { value: 'giam-mo', label: 'Giảm mỡ' },
     { value: 'tang-can', label: 'Tăng cân' },
     { value: 'duy-tri', label: 'Duy trì' },
   ]
+
+  const activityLevels = [
+    { value: 1, description: 'Ít hoạt động, chỉ ăn đi làm về ngủ' },
+    { value: 2, description: 'Có tập nhẹ nhàng, tuần 1-3' },
+    { value: 3, description: 'Có vận động vừa 4-5 buổi' },
+    { value: 4, description: 'Vận động nhiều 6-7 buổi' },
+    { value: 5, description: 'Vận động rất nhiều ngày tập 2 lần' },
+  ]
   return (
-    <div className="mt-10 flex justify-center">
+    <div className="my-10 flex justify-center">
       <div className="container space-y-10">
         <div className="grid grid-cols-3 justify-center">
           <div className="space-y-3">
             <p className="text-[#0A7770]">MỤC TIÊU</p>
             <Select
               items={targets}
-              defaultSelectedKeys={['giam-mo']}
               radius={'full'}
+              selectedKeys={[gold]}
+              onChange={(e) => setGold(e.target.value)}
               classNames={{
                 listbox:
-                  'shadow-xl/20 inset-shadow-xs rounded-lg w-full bg-white',
+                  'shadow-xl/20 inset-shadow-xs rounded-lg w-full bg-white ',
                 trigger: 'bg-[#0A7770] text-[#FFB82E] cursor-pointer',
                 selectorIcon: 'hidden',
                 innerWrapper: 'flex items-center',
@@ -42,7 +56,7 @@ const Page = () => {
               {targets.map((target) => (
                 <SelectItem
                   key={target.value}
-                  className="h-8 py-2 hover:bg-[#0A7770] hover:text-[#FFB82E]"
+                  className="h-8 py-2 pl-2 hover:bg-[#F9F9F3] hover:text-[#FFB82E]"
                 >
                   {target.label}
                 </SelectItem>
@@ -85,10 +99,59 @@ const Page = () => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-3 space-x-2">
-          <Card title="TUỔI" value={old} description="(năm)" />
-          <Card title="CHIỀU CAO" value={height} description="(cm)" />
-          <Card title="CÂN NẶNG" value={weight} description="(kg)" />
+        <div className="space-y-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
+          <Card
+            title="TUỔI"
+            value={old}
+            description="(năm)"
+            onChange={setOld}
+            min={1}
+            max={120}
+          />
+          <Card
+            title="CHIỀU CAO"
+            value={height}
+            description="(cm)"
+            onChange={setHeight}
+            min={10}
+            max={220}
+          />
+          <Card
+            title="CÂN NẶNG"
+            value={weight}
+            description="(kg)"
+            onChange={setWeight}
+            min={2}
+            max={300}
+          />
+          <Card
+            title="THỜI GIAN ĂN"
+            value={meal}
+            description="(bữa / ngày)"
+            onChange={setMeal}
+            min={1}
+            max={7}
+          />
+        </div>
+        <div className="space-y-2">
+          <p className="text-[#0A7770]">CƯỜNG ĐỘ TẬP LUYỆN</p>
+          <div className="grid grid-cols-5 gap-5">
+            {activityLevels.map((activityLevel, index) => (
+              <ButtonActive
+                value={activityLevel.value}
+                active={activityLevel.value === active}
+                onClick={setActive}
+                key={index}
+              />
+            ))}
+          </div>
+          <div className="flex flex-col items-center justify-center text-[#FFB82E]">
+            {
+              activityLevels.find(
+                (activityLevel) => activityLevel.value === active,
+              )?.description
+            }
+          </div>
         </div>
       </div>
     </div>
