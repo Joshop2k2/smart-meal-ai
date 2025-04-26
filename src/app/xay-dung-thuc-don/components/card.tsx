@@ -47,13 +47,10 @@ const Card = ({
         </div>
 
         <div className="flex flex-col items-center justify-center">
-          <Input
+          <input
             value={value.toString()}
-            className="h-8 w-10 items-center text-2xl"
-            classNames={{
-              base: 'flex flex-col item-center justify-center',
-            }}
-            onValueChange={(value) => handleChange(value)}
+            className="h-8 w-10 text-center text-2xl"
+            onChange={(e) => handleChange(e.target.value)}
           />
         </div>
 

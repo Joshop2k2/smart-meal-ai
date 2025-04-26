@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Select, SelectItem } from '@nextui-org/react'
+import { Button, Select, SelectItem, Textarea } from '@nextui-org/react'
 import { useState } from 'react'
 import clsx from 'clsx'
 import Card from './components/card'
@@ -113,7 +113,7 @@ const Page = () => {
             value={height}
             description="(cm)"
             onChange={setHeight}
-            min={10}
+            min={1}
             max={220}
           />
           <Card
@@ -121,7 +121,7 @@ const Page = () => {
             value={weight}
             description="(kg)"
             onChange={setWeight}
-            min={2}
+            min={1}
             max={300}
           />
           <Card
@@ -152,6 +152,13 @@ const Page = () => {
               )?.description
             }
           </div>
+        </div>
+        <div className="">
+          <p className="text-[#0A7770]">THÊM THÔNG TIN</p>
+          <textarea
+            className="min-h-20 w-full rounded-lg border-2 border-[#0A7770] bg-[#F9F9F3] px-3 py-2 text-[#0A7770]"
+            placeholder="Nhập thêm thông tin về tình trạng sức khỏe, bệnh lý..."
+          />
         </div>
       </div>
     </div>
