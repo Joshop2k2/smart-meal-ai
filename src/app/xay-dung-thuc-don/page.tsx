@@ -156,8 +156,8 @@ const Page = () => {
         <div className="">
           <p className="text-[#0A7770]">THÊM THÔNG TIN</p>
           <textarea
-            className="min-h-20 w-full rounded-lg border-2 border-[#0A7770] bg-[#F9F9F3] px-3 py-2 text-[#0A7770]"
-            placeholder="Nhập thêm thông tin về tình trạng sức khỏe, bệnh lý..."
+            className="min-h-20 w-full rounded-lg border-2 border-[#0A7770] bg-[#F9F9F3] px-3 py-2"
+            placeholder="Nhập thêm thông tin về tình trạng sức khỏe, bệnh lý, dị ứng..."
           />
         </div>
       </div>
