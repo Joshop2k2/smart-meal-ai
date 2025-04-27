@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Select, SelectItem, Textarea } from '@nextui-org/react'
+import { Button, Select, SelectItem } from '@nextui-org/react'
 import { useState } from 'react'
 import clsx from 'clsx'
 import Card from './components/card'
@@ -153,12 +153,26 @@ const Page = () => {
             }
           </div>
         </div>
-        <div className="">
+        <div>
           <p className="text-[#0A7770]">THÊM THÔNG TIN</p>
           <textarea
             className="min-h-20 w-full rounded-lg border-2 border-[#0A7770] bg-[#F9F9F3] px-3 py-2"
             placeholder="Nhập thêm thông tin về tình trạng sức khỏe, bệnh lý, dị ứng..."
           />
+        </div>
+        <div className="flex justify-center">
+          <Button
+            className={clsx(
+              'text-l cursor-pointer rounded-full bg-gradient-to-r from-[#F0F9EE] to-[#F9F9F3] font-semibold text-[#0A7770] shadow-lg transition-transform duration-300 hover:scale-105',
+              'hover:border-2 hover:border-[#FFB82E] hover:from-[#0A7770] hover:to-[#0A7770] hover:text-[#FFB82E]',
+            )}
+            onPress={() => {
+              console.log('Tạo thực đơn')
+            }}
+            disableAnimation={true}
+          >
+            {'TẠO THỰC ĐƠN'}
+          </Button>
         </div>
       </div>
     </div>
