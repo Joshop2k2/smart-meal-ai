@@ -5,21 +5,23 @@ import { useState } from 'react'
 import clsx from 'clsx'
 import Card from './components/card'
 import ButtonActive from './components/buttonActive'
-
-enum Gender {
-  Men = 'men',
-  Women = 'women',
-}
+import MenuMeal from './components/menuMeal'
+import { suggestMeal } from '@/services/api'
+import { Menu } from '@/types/menuMeal'
 
 const Page = () => {
-  const [gender, setGender] = useState<Gender>(Gender.Men)
+  const [gender, setGender] = useState<'men' | 'women'>('men')
   const [old, setOld] = useState<number>(23)
   const [weight, setWeight] = useState<number>(65)
   const [height, setHeight] = useState<number>(170)
   const [meal, setMeal] = useState<number>(3)
   const [active, setActive] = useState<number>(3)
-  const [gold, setGold] = useState<string>('giam-mo')
-  console.log('gold: ', gold)
+  const [target, setTarget] = useState<'giam-mo' | 'tang-can' | 'duy-tri'>(
+    'giam-mo',
+  )
+  const [addInfo, setAddInfo] = useState<string>('')
+  const [menuMeal, setMenuMeal] = useState<Menu[] | undefined>(undefined)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const targets = [
     { value: 'giam-mo', label: 'Giảm mỡ' },
@@ -29,11 +31,30 @@ const Page = () => {
 
   const activityLevels = [
     { value: 1, description: 'Ít hoạt động, chỉ ăn đi làm về ngủ' },
-    { value: 2, description: 'Có tập nhẹ nhàng, tuần 1-3' },
+    { value: 2, description: 'Có tập nhẹ nhàng, tuần 1-3 buổi' },
     { value: 3, description: 'Có vận động vừa 4-5 buổi' },
     { value: 4, description: 'Vận động nhiều 6-7 buổi' },
     { value: 5, description: 'Vận động rất nhiều ngày tập 2 lần' },
   ]
+
+  const handdleCreateMeal = async () => {
+    setLoading(true)
+    const response = await suggestMeal({
+      startDate: new Date(),
+      endDate: new Date(new Date().setDate(new Date().getDate() + 6)),
+      target: target,
+      age: 20,
+      gender: gender,
+      height: height,
+      weight: weight,
+      active: active as 1 | 2 | 3 | 4 | 5,
+      meal: meal,
+      addInfo: addInfo,
+    })
+    setLoading(false)
+    setMenuMeal(response.suggest)
+  }
+
   return (
     <div className="my-10 flex justify-center">
       <div className="container space-y-10">
@@ -43,8 +64,10 @@ const Page = () => {
             <Select
               items={targets}
               radius={'full'}
-              selectedKeys={[gold]}
-              onChange={(e) => setGold(e.target.value)}
+              selectedKeys={[target]}
+              onChange={(e) =>
+                setTarget(e.target.value as 'giam-mo' | 'tang-can' | 'duy-tri')
+              }
               classNames={{
                 listbox:
                   'shadow-xl/20 inset-shadow-xs rounded-lg w-full bg-white ',
@@ -68,12 +91,12 @@ const Page = () => {
               <p className="text-[#0A7770]">GIỚI TÍNH</p>
               <div className="grid grid-cols-2">
                 <Button
-                  onPress={() => setGender(Gender.Men)}
+                  onPress={() => setGender('men')}
                   disableAnimation={true}
                   className={clsx(
                     'cursor-pointer rounded-l-full bg-[#F9F9F3]',
                     'hover:border-2 hover:border-[#0A7770] hover:text-black hover:shadow-xl',
-                    gender === Gender.Men
+                    gender === 'men'
                       ? 'border-2 border-[#0A7770] text-black shadow-xl'
                       : 'text-gray-400',
                     'focus:ring-0 focus:outline-none focus-visible:z-0 focus-visible:ring-0 focus-visible:outline-none',
@@ -82,12 +105,12 @@ const Page = () => {
                   Nam
                 </Button>
                 <Button
-                  onPress={() => setGender(Gender.Women)}
+                  onPress={() => setGender('women')}
                   disableAnimation={true}
                   className={clsx(
                     'cursor-pointer rounded-r-full bg-[#F9F9F3]',
                     'hover:border-2 hover:border-[#0A7770] hover:text-black hover:shadow-xl',
-                    gender === Gender.Women
+                    gender === 'women'
                       ? 'border-2 border-[#0A7770] text-black shadow-xl'
                       : 'text-gray-400',
                     'focus:ring-0 focus:outline-none focus-visible:z-0 focus-visible:ring-0 focus-visible:outline-none',
@@ -158,22 +181,52 @@ const Page = () => {
           <textarea
             className="min-h-20 w-full rounded-lg border-2 border-[#0A7770] bg-[#F9F9F3] px-3 py-2"
             placeholder="Nhập thêm thông tin về tình trạng sức khỏe, bệnh lý, dị ứng..."
+            value={addInfo}
+            onChange={(e) => setAddInfo(e.target.value)}
           />
         </div>
         <div className="flex justify-center">
           <Button
             className={clsx(
-              'text-l cursor-pointer rounded-full bg-gradient-to-r from-[#F0F9EE] to-[#F9F9F3] font-semibold text-[#0A7770] shadow-lg transition-transform duration-300 hover:scale-105',
-              'hover:border-2 hover:border-[#FFB82E] hover:from-[#0A7770] hover:to-[#0A7770] hover:text-[#FFB82E]',
+              'text-l cursor-pointer rounded-full font-semibold shadow-lg transition-transform duration-300',
+              loading
+                ? 'bg-gray-400 text-white'
+                : 'bg-gradient-to-r from-[#F0F9EE] to-[#F9F9F3] text-[#0A7770] hover:scale-105 hover:border-2 hover:border-[#FFB82E] hover:from-[#0A7770] hover:to-[#0A7770] hover:text-[#FFB82E]',
             )}
-            onPress={() => {
-              console.log('Tạo thực đơn')
-            }}
+            onPress={handdleCreateMeal}
             disableAnimation={true}
+            isDisabled={loading}
           >
-            {'TẠO THỰC ĐƠN'}
+            {loading ? (
+              <div className="flex">
+                <svg
+                  className="h-5 w-5 animate-spin text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                <span className="ml-2">Đang tạo...</span>
+              </div>
+            ) : (
+              'TẠO THỰC ĐƠN'
+            )}
           </Button>
         </div>
+        {menuMeal && <MenuMeal suggest={menuMeal} />}
       </div>
     </div>
   )
