@@ -1,17 +1,19 @@
 import axios from 'axios'
 import { Menu } from '@/types/menuMeal'
+import { AxiosResponse } from 'axios'
+import { UserType } from '@/types/user'
 
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
-const postData = async (endpoint: string, data: unknown) => {
+export const postData = async (endpoint: string, data: unknown) => {
   try {
     const response = await axios.post(`${baseURL}${endpoint}`, data, {
       headers: {
         'Content-Type': 'application/json',
       },
+      withCredentials: true,
     })
-
-    return response.data
+    return response
   } catch (error) {
     console.error('Error posting data:', error)
     throw error
@@ -33,9 +35,24 @@ export interface MealRequest {
 
 export const suggestMeal = async (
   data: MealRequest,
-): Promise<{ message: string; suggest: Menu[] }> => {
+): Promise<AxiosResponse<{ message: string; suggest: Menu[] }>> => {
   try {
     const response = await postData('/meals/suggest', data)
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+export const login = async ({
+  email,
+  password,
+}: {
+  email: string
+  password: string
+}): Promise<AxiosResponse<{ token: string; user: UserType }>> => {
+  try {
+    const response = await postData('/users/login', { email, password })
     return response
   } catch (error) {
     throw error

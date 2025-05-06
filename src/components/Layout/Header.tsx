@@ -12,10 +12,10 @@ import {
   Link,
 } from '@nextui-org/react'
 import { Bars3Icon } from '@heroicons/react/24/outline'
+import clsx from 'clsx'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  console.log('isMenuOpen: ', isMenuOpen)
 
   return (
     <div className="flex justify-center bg-gradient-to-r from-[#F0F9EE] to-[#F9F9F3]">
@@ -28,7 +28,7 @@ const Header = () => {
           }}
           className="w-full"
         >
-          <NavbarContent className="flex space-x-20 text-[#529A92]">
+          <NavbarContent className="flex w-full space-x-20 text-[#529A92]">
             <NavbarBrand>
               <Link href="/#">
                 <h2 className="text-2xl font-semibold text-[#0A7770] md:text-3xl">
@@ -37,7 +37,12 @@ const Header = () => {
               </Link>
             </NavbarBrand>
 
-            <NavbarContent className="my-2 hidden md:flex">
+            <NavbarContent
+              className={clsx(
+                'my-2 hidden w-full',
+                'md:flex md:justify-between',
+              )}
+            >
               <NavbarContent className="space-x-6">
                 <NavbarItem>
                   <Link href="gioi-thieu">
@@ -49,6 +54,11 @@ const Header = () => {
                     <p>Thực đơn thông minh</p>
                   </Link>
                 </NavbarItem>
+              </NavbarContent>
+              <NavbarContent>
+                <Link href="dang-nhap">
+                  <p>Đăng nhập</p>
+                </Link>
               </NavbarContent>
             </NavbarContent>
           </NavbarContent>
