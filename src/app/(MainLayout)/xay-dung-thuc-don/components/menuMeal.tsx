@@ -20,7 +20,15 @@ const columns = [
   { key: 'calo', label: 'Calo' },
 ]
 
-const MenuMeal = ({ suggest }: { suggest: Menu[] }) => {
+const MenuMeal = ({
+  suggest,
+  onSave,
+  isSaved,
+}: {
+  suggest: Menu[]
+  onSave?: () => void
+  isSaved?: boolean
+}) => {
   const flatRows = suggest.flatMap((menu) =>
     menu.meals.map((meal, idx) => ({
       Ngày: idx === 0 ? menu.date : '',
@@ -58,7 +66,7 @@ const MenuMeal = ({ suggest }: { suggest: Menu[] }) => {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex justify-end space-x-3">
         <Button
           className={clsx(
             'text-l cursor-pointer rounded-full bg-gradient-to-r from-[#F0F9EE] to-[#F9F9F3] font-semibold text-[#0A7770] shadow-lg transition-transform duration-300 hover:scale-105',
@@ -69,6 +77,18 @@ const MenuMeal = ({ suggest }: { suggest: Menu[] }) => {
         >
           {'TẢI XUỐNG EXCEL'}
         </Button>
+        {!isSaved && (
+          <Button
+            className={clsx(
+              'text-l cursor-pointer rounded-full font-semibold text-[#0A7770] shadow-lg transition-transform duration-300',
+              'bg-gradient-to-r from-[#F0F9EE] to-[#F9F9F3] hover:scale-105 hover:border-2 hover:border-[#FFB82E] hover:from-[#0A7770] hover:to-[#0A7770] hover:text-[#FFB82E]',
+            )}
+            onPress={onSave}
+            disableAnimation={true}
+          >
+            {'LƯU THỰC ĐƠN'}
+          </Button>
+        )}
       </div>
 
       <div className="overflow-hidden rounded-lg border-2 border-[#0A7770]">
@@ -77,7 +97,7 @@ const MenuMeal = ({ suggest }: { suggest: Menu[] }) => {
             isHeaderSticky
             aria-label="Thực đơn dinh dưỡng"
             removeWrapper
-            className="min-w-full"
+            className="min-w-full bg-white"
           >
             <TableHeader>
               {columns.map((column) => (

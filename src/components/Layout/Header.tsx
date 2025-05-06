@@ -13,9 +13,11 @@ import {
 } from '@nextui-org/react'
 import { Bars3Icon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
+import { useAuth } from '@/components/AuthContext'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const context = useAuth()
 
   return (
     <div className="flex justify-center bg-gradient-to-r from-[#F0F9EE] to-[#F9F9F3]">
@@ -54,12 +56,21 @@ const Header = () => {
                     <p>Thực đơn thông minh</p>
                   </Link>
                 </NavbarItem>
+                {context.isLogin && (
+                  <NavbarItem>
+                    <Link href="quan-ly-thuc-don">
+                      <p>Quản lý thực đơn</p>
+                    </Link>
+                  </NavbarItem>
+                )}
               </NavbarContent>
-              <NavbarContent>
-                <Link href="dang-nhap">
-                  <p>Đăng nhập</p>
-                </Link>
-              </NavbarContent>
+              {!context.isLogin && (
+                <NavbarContent>
+                  <Link href="dang-nhap">
+                    <p>Đăng nhập/Đăng ký</p>
+                  </Link>
+                </NavbarContent>
+              )}
             </NavbarContent>
           </NavbarContent>
 
@@ -87,6 +98,13 @@ const Header = () => {
                   <p>Thực đơn thông minh</p>
                 </Link>
               </NavbarMenuItem>
+              {!context.isLogin && (
+                <NavbarContent>
+                  <Link href="dang-nhap">
+                    <p>Đăng nhập/Đăng ký</p>
+                  </Link>
+                </NavbarContent>
+              )}
             </NavbarMenu>
           )}
         </Navbar>

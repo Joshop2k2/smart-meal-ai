@@ -1,13 +1,14 @@
 'use client'
 
 import { Button, Select, SelectItem } from '@nextui-org/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import Card from './components/card'
 import ButtonActive from './components/buttonActive'
 import MenuMeal from './components/menuMeal'
-import { suggestMeal } from '@/services/api'
+import { suggestMeal, saveMeal } from '@/services/api'
 import { Menu } from '@/types/menuMeal'
+import { activityLevels, targets } from '@/types'
 
 const Page = () => {
   const [gender, setGender] = useState<'men' | 'women'>('men')
@@ -20,39 +21,54 @@ const Page = () => {
     'giam-mo',
   )
   const [addInfo, setAddInfo] = useState<string>('')
-  const [menuMeal, setMenuMeal] = useState<Menu[] | undefined>(undefined)
+  const [menuMeal, setMenuMeal] = useState<Menu[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-
-  const targets = [
-    { value: 'giam-mo', label: 'Giảm mỡ' },
-    { value: 'tang-can', label: 'Tăng cân' },
-    { value: 'duy-tri', label: 'Duy trì' },
-  ]
-
-  const activityLevels = [
-    { value: 1, description: 'Ít hoạt động, chỉ ăn đi làm về ngủ' },
-    { value: 2, description: 'Có tập nhẹ nhàng, tuần 1-3 buổi' },
-    { value: 3, description: 'Có vận động vừa 4-5 buổi' },
-    { value: 4, description: 'Vận động nhiều 6-7 buổi' },
-    { value: 5, description: 'Vận động rất nhiều ngày tập 2 lần' },
-  ]
+  const [isSaved, setIsSave] = useState<boolean>(false)
 
   const handdleCreateMeal = async () => {
     setLoading(true)
-    const response = await suggestMeal({
-      startDate: new Date(),
-      endDate: new Date(new Date().setDate(new Date().getDate() + 6)),
-      target: target,
-      age: 20,
-      gender: gender,
-      height: height,
-      weight: weight,
-      active: active as 1 | 2 | 3 | 4 | 5,
-      meal: meal,
-      addInfo: addInfo,
-    })
-    setLoading(false)
-    setMenuMeal(response.suggest)
+    try {
+      const response = await suggestMeal({
+        startDate: new Date(),
+        endDate: new Date(),
+        target: target,
+        age: old,
+        gender: gender,
+        height: height,
+        weight: weight,
+        active: active as 1 | 2 | 3 | 4 | 5,
+        meal: meal,
+        addInfo: addInfo,
+      })
+      setMenuMeal(response.data.suggest)
+      setIsSave(false)
+    } catch (error) {
+      console.log('error: ', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSaveMeal = async () => {
+    try {
+      await saveMeal({
+        startDate: new Date(),
+        endDate: new Date(),
+        target: target,
+        age: old,
+        gender: gender,
+        height: height,
+        weight: weight,
+        active: active as 1 | 2 | 3 | 4 | 5,
+        meal: meal,
+        addInfo: addInfo,
+        name: 'test name',
+        suggest: menuMeal,
+      })
+      setIsSave(true)
+    } catch (error) {
+      console.log('error: ', error)
+    }
   }
 
   return (
@@ -226,7 +242,13 @@ const Page = () => {
             )}
           </Button>
         </div>
-        {menuMeal && <MenuMeal suggest={menuMeal} />}
+        {menuMeal.length > 0 && (
+          <MenuMeal
+            suggest={menuMeal}
+            onSave={handleSaveMeal}
+            isSaved={isSaved}
+          />
+        )}
       </div>
     </div>
   )

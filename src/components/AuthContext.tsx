@@ -1,5 +1,4 @@
-// context/AuthContext.tsx
-'use client' // if using App Router
+'use client'
 
 import React, { createContext, useContext, useState, ReactNode } from 'react'
 
@@ -11,7 +10,10 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isLogin, setIsLogin] = useState(false)
+  const [isLogin, setIsLogin] = useState(() => {
+    const token = localStorage.getItem('token')
+    return !!token
+  })
 
   return (
     <AuthContext.Provider value={{ isLogin, setIsLogin }}>

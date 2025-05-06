@@ -21,6 +21,9 @@ const Footer = () => {
             <Link href="xay-dung-thuc-don">
               <p>Thực đơn thông minh</p>
             </Link>
+            <Link href="quan-ly-thuc-don">
+              <p>Quản lý thực đơn</p>
+            </Link>
           </div>
           <div>
             <h2>HỖ TRỢ KHÁCH HÀNG</h2>

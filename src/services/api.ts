@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Menu } from '@/types/menuMeal'
 import { AxiosResponse } from 'axios'
 import { UserType } from '@/types/user'
+import { MealRequest } from '@/types/menuMeal'
 
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
@@ -20,17 +21,23 @@ export const postData = async (endpoint: string, data: unknown) => {
   }
 }
 
-export interface MealRequest {
-  startDate: Date
-  endDate: Date
-  target: 'giam-mo' | 'tang-can' | 'duy-tri'
-  age: number
-  gender: 'men' | 'women'
-  height: number
-  weight: number
-  active: 1 | 2 | 3 | 4 | 5
-  meal: number
-  addInfo?: string
+export const getData = async (
+  endpoint: string,
+  params?: Record<string, unknown>,
+) => {
+  try {
+    const response = await axios.get(`${baseURL}${endpoint}`, {
+      params,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    })
+    return response
+  } catch (error) {
+    console.error('Error fetching data:', error)
+    throw error
+  }
 }
 
 export const suggestMeal = async (
@@ -55,6 +62,59 @@ export const login = async ({
     const response = await postData('/users/login', { email, password })
     return response
   } catch (error) {
+    throw error
+  }
+}
+
+export const getMeals = async (): Promise<
+  AxiosResponse<{
+    meals: (MealRequest & { suggest: Menu[]; name: string; _id: string })[]
+  }>
+> => {
+  try {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      throw new Error('No token found in localStorage')
+    }
+
+    const userId = JSON.parse(atob(token.split('.')[1])).id
+    const response = await getData(`/meals/${userId}`)
+
+    return response
+  } catch (error) {
+    console.error('Error fetching meals:', error)
+    throw error
+  }
+}
+export const saveMeal = async (
+  meal: MealRequest & { suggest: Menu[]; name: string },
+): Promise<AxiosResponse<{ message: string }>> => {
+  try {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      throw new Error('No token found in localStorage')
+    }
+    const userId = JSON.parse(atob(token.split('.')[1])).id
+
+    const startDate = meal.startDate
+      .toLocaleDateString('en-GB')
+      .split('/')
+      .reverse()
+      .join('-')
+    const endDate = meal.endDate
+      .toLocaleDateString('en-GB')
+      .split('/')
+      .reverse()
+      .join('-')
+
+    const response = await postData(`/meals/${userId}`, {
+      ...meal,
+      startDate,
+      endDate,
+    })
+    return response
+  } catch (error) {
+    console.error('Error saving meal:', error)
     throw error
   }
 }
