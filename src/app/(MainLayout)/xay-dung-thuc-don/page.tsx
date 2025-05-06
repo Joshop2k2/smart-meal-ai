@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Select, SelectItem } from '@nextui-org/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import clsx from 'clsx'
 import Card from './components/card'
 import ButtonActive from './components/buttonActive'
@@ -9,6 +9,7 @@ import MenuMeal from './components/menuMeal'
 import { suggestMeal, saveMeal } from '@/services/api'
 import { Menu } from '@/types/menuMeal'
 import { activityLevels, targets } from '@/types'
+import { useAuth } from '@/components/AuthContext'
 
 const Page = () => {
   const [gender, setGender] = useState<'men' | 'women'>('men')
@@ -24,6 +25,7 @@ const Page = () => {
   const [menuMeal, setMenuMeal] = useState<Menu[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [isSaved, setIsSave] = useState<boolean>(false)
+  const context = useAuth()
 
   const handdleCreateMeal = async () => {
     setLoading(true)
@@ -246,7 +248,7 @@ const Page = () => {
           <MenuMeal
             suggest={menuMeal}
             onSave={handleSaveMeal}
-            isSaved={isSaved}
+            isSaved={!context.isLogin || isSaved}
           />
         )}
       </div>

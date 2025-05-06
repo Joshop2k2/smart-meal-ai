@@ -29,15 +29,24 @@ const Login = () => {
         email,
         password,
       })
-      console.log('response: ', response)
       localStorage.setItem('token', response.data.token)
       localStorage.setItem('user', JSON.stringify(response.data.user))
       setLoading(false)
 
       window.location.href = '/'
-    } catch (error: any) {
-      console.log(error.message)
-      toastError(error.response.data.error)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error.message)
+      }
+      if (error && typeof error === 'object' && 'response' in error) {
+        if (
+          error.response &&
+          typeof error.response === 'object' &&
+          'data' in error.response
+        ) {
+          toastError((error.response as { data: { error: string } }).data.error)
+        }
+      }
     } finally {
       setLoading(false)
     }

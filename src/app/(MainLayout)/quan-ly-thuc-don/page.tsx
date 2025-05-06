@@ -4,11 +4,9 @@ import { useEffect, useState } from 'react'
 import { Menu, MealRequest } from '@/types/menuMeal'
 import { toastError } from '@/services/toastify'
 import MealCard from './components/MealCard'
-import MenuMeal from '@/app/(MainLayout)/xay-dung-thuc-don/components/menuMeal'
 import Modal from './components/Modal'
 
 const Page = () => {
-  const [loading, setLoading] = useState<boolean>(false)
   const [menuMeal, setMenuMeal] = useState<
     (MealRequest & { suggest: Menu[]; name: string; _id: string })[] | undefined
   >(undefined)
@@ -17,14 +15,12 @@ const Page = () => {
 
   const handlegetMeals = async () => {
     try {
-      setLoading(true)
       const res = await getMeals()
       setMenuMeal(res.data.meals)
     } catch (error) {
       console.error(error)
       toastError('Lỗi tải thực đơn...')
     } finally {
-      setLoading(false)
     }
   }
   const handleOpenModal = (_id: string) => {
@@ -50,10 +46,11 @@ const Page = () => {
           {menuMeal &&
             menuMeal.map((meal, index) => (
               <div
+                key={index}
                 onClick={() => handleOpenModal(meal._id)}
                 className="cursor-pointer"
               >
-                <MealCard key={index} data={meal} />
+                <MealCard data={meal} />
               </div>
             ))}
         </div>

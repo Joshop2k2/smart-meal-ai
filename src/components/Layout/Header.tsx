@@ -64,11 +64,22 @@ const Header = () => {
                   </NavbarItem>
                 )}
               </NavbarContent>
-              {!context.isLogin && (
+              {!context.isLogin ? (
                 <NavbarContent>
                   <Link href="dang-nhap">
                     <p>Đăng nhập/Đăng ký</p>
                   </Link>
+                </NavbarContent>
+              ) : (
+                <NavbarContent>
+                  <button
+                    onClick={() => {
+                      context.logout()
+                    }}
+                    className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+                  >
+                    Đăng xuất
+                  </button>
                 </NavbarContent>
               )}
             </NavbarContent>

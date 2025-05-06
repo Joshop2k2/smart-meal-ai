@@ -5,18 +5,27 @@ import React, { createContext, useContext, useState, ReactNode } from 'react'
 type AuthContextType = {
   isLogin: boolean
   setIsLogin: (value: boolean) => void
+  logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLogin, setIsLogin] = useState(() => {
-    const token = localStorage.getItem('token')
-    return !!token
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token')
+      return !!token
+    }
+    return false
   })
+  const logout = () => {
+    localStorage.removeItem('token')
+    setIsLogin(false)
+    window.location.href = '/'
+  }
 
   return (
-    <AuthContext.Provider value={{ isLogin, setIsLogin }}>
+    <AuthContext.Provider value={{ isLogin, setIsLogin, logout }}>
       {children}
     </AuthContext.Provider>
   )
