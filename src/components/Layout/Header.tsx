@@ -72,11 +72,12 @@ const Header = () => {
                 </NavbarContent>
               ) : (
                 <NavbarContent>
+                  <p>{context.user.firstName}</p>
                   <button
                     onClick={() => {
                       context.logout()
                     }}
-                    className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+                    className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600"
                   >
                     Đăng xuất
                   </button>

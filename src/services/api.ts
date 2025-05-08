@@ -129,21 +129,8 @@ export const saveMeal = async (
     }
     const userId = JSON.parse(atob(token.split('.')[1])).id
 
-    const startDate = meal.startDate
-      .toLocaleDateString('en-GB')
-      .split('/')
-      .reverse()
-      .join('-')
-    const endDate = meal.endDate
-      .toLocaleDateString('en-GB')
-      .split('/')
-      .reverse()
-      .join('-')
-
     const response = await postData(`/meals/${userId}`, {
       ...meal,
-      startDate,
-      endDate,
     })
     return response
   } catch (error) {

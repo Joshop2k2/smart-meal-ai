@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Select, SelectItem } from '@nextui-org/react'
+import { Button, Select, SelectItem, Input } from '@nextui-org/react'
 import { useState } from 'react'
 import clsx from 'clsx'
 import Card from './components/card'
@@ -10,12 +10,14 @@ import { suggestMeal, saveMeal } from '@/services/api'
 import { Menu } from '@/types/menuMeal'
 import { activityLevels, targets } from '@/types'
 import { useAuth } from '@/components/AuthContext'
+import { parseDate, formatDate } from '@/helpers'
+import { toastError } from '@/services/toastify'
 
 const Page = () => {
   const [gender, setGender] = useState<'men' | 'women'>('women')
-  const [old, setOld] = useState<number>(23)
+  const [old, setOld] = useState<number>(40)
   const [weight, setWeight] = useState<number>(65)
-  const [height, setHeight] = useState<number>(170)
+  const [height, setHeight] = useState<number>(155)
   const [meal, setMeal] = useState<number>(3)
   const [active, setActive] = useState<number>(3)
   const [target, setTarget] = useState<'giam-mo' | 'tang-can' | 'duy-tri'>(
@@ -26,13 +28,25 @@ const Page = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [isSaved, setIsSave] = useState<boolean>(false)
   const context = useAuth()
+  const [startDate, setStartDate] = useState<string>(formatDate(new Date()))
+  const [endDate, setEndDate] = useState<string>(formatDate(new Date()))
+  const [isValidStartDate, setIsValidStartDate] = useState<boolean | undefined>(
+    true,
+  )
+  const [isValidEndDate, setIsValidEndDate] = useState<boolean | undefined>(
+    undefined,
+  )
 
   const handdleCreateMeal = async () => {
+    if (isValidEndDate === false || isValidStartDate == false) {
+      return
+    }
     setLoading(true)
+
     try {
       const response = await suggestMeal({
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: startDate,
+        endDate: endDate,
         target: target,
         age: old,
         gender: gender,
@@ -54,8 +68,8 @@ const Page = () => {
   const handleSaveMeal = async () => {
     try {
       await saveMeal({
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: startDate,
+        endDate: startDate,
         target: target,
         age: old,
         gender: gender,
@@ -73,9 +87,114 @@ const Page = () => {
     }
   }
 
+  const handleStartDateChange = () => {
+    const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/
+    const parsedDate = parseDate(startDate)
+    const currentDate = new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      new Date().getDate(),
+    )
+    const parsedDateOnly = new Date(
+      parsedDate.getFullYear(),
+      parsedDate.getMonth(),
+      parsedDate.getDate(),
+    )
+
+    if (
+      !dateRegex.test(startDate) ||
+      !parsedDate ||
+      currentDate.getTime() > parsedDateOnly.getTime()
+    ) {
+      setIsValidStartDate(false)
+      toastError('Ngày bắt đầu sai định dạng hoặc nhỏ hơn ngày hôm nay')
+    } else {
+      setIsValidStartDate(true)
+      handleEndDateChange()
+    }
+  }
+
+  const handleEndDateChange = () => {
+    const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/
+
+    if (!dateRegex.test(endDate)) {
+      setIsValidEndDate(false)
+      toastError('Ngày kết thúc sai định dạng')
+      return
+    }
+    const parsedStartDate = parseDate(startDate)
+    const parsedEndDate = parseDate(endDate)
+
+    const parsedStartDateOnly = new Date(
+      parsedStartDate.getFullYear(),
+      parsedStartDate.getMonth(),
+      parsedStartDate.getDate(),
+    )
+
+    const parsedEndDateOnly = new Date(
+      parsedEndDate.getFullYear(),
+      parsedEndDate.getMonth(),
+      parsedEndDate.getDate(),
+    )
+
+    if (
+      parsedEndDateOnly.getTime() >
+      parsedStartDateOnly.getTime() + 6 * 24 * 60 * 60 * 1000
+    ) {
+      setIsValidEndDate(false)
+      toastError('Ngày kết thúc không được lớn hơn ngày bắt đầu quá 7 ngày')
+      return
+    }
+
+    if (
+      !parsedEndDate ||
+      parsedEndDateOnly.getTime() < parsedStartDateOnly.getTime()
+    ) {
+      setIsValidEndDate(false)
+      toastError('Ngày kết thúc nhỏ hơn ngày bắt đầu')
+    } else {
+      setIsValidEndDate(true)
+    }
+  }
+
   return (
     <div className="my-10 flex justify-center">
       <div className="container space-y-10">
+        <div className="grid-clos-1 grid gap-2 space-y-5 md:grid-cols-3 md:space-y-0">
+          <div>
+            <p className={'mb-2 pl-4'}>Ngày bắt đầu</p>
+            <Input
+              placeholder="Ngày bắt đầu - DD/MM/YYYY"
+              value={startDate}
+              type="text"
+              classNames={{
+                input: clsx(
+                  'border-gray-500 !border-2 h-10 rounded-3xl px-4 bg-[#F7F8F3] border-[#0A7770]',
+                  isValidStartDate === false ? 'border-red-400 bg-red-100' : '',
+                ),
+              }}
+              onValueChange={setStartDate}
+              onBlur={handleStartDateChange}
+            />
+          </div>
+          <div>
+            <p className={'mb-2 pl-4'}>Ngày kết thúc</p>
+            <Input
+              placeholder="Ngày kết thúc - DD/MM/YYYY"
+              value={endDate}
+              type="text"
+              classNames={{
+                input: clsx(
+                  'border-gray-500 !border-2 h-10 rounded-3xl px-4 bg-[#F7F8F3] border-[#0A7770]',
+                  isValidEndDate === false ? 'border-red-400 bg-red-100' : '',
+                ),
+              }}
+              onValueChange={setEndDate}
+              isDisabled={!isValidStartDate}
+              onBlur={handleEndDateChange}
+            />
+          </div>
+        </div>
         <div className="grid grid-cols-3 justify-center">
           <div className="space-y-3">
             <p className="text-[#0A7770]">MỤC TIÊU</p>

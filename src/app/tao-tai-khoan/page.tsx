@@ -169,7 +169,6 @@ const Login = () => {
               const dateRegex =
                 /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/
               const parsedDate = parseDate(birthDate)
-              console.log('parsedDate: ', parsedDate)
               if (
                 !dateRegex.test(birthDate) ||
                 !parsedDate ||
@@ -267,7 +266,7 @@ const Login = () => {
           </div>
           <div className="flex w-90 flex-col items-center justify-center px-4">
             <Link
-              href="/tao-tai-khoan"
+              href="/dang-nhap"
               className={clsx(
                 'mt-5 flex w-full justify-center rounded-tl-2xl rounded-br-2xl border-2 border-[#0A7770] bg-white px-3 py-1 text-lg font-semibold text-[#0A7770] shadow-2xl',
                 'hover:bg-[#FFB82E]',

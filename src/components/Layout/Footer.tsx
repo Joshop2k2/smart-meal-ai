@@ -26,10 +26,16 @@ const Footer = () => {
             </Link>
           </div>
           <div>
-            <h2>HỖ TRỢ KHÁCH HÀNG</h2>
-            <p>1</p>
-            <p>2</p>
-            <p>3</p>
+            <h2 className="mb-2">HỖ TRỢ KHÁCH HÀNG</h2>
+            <p>Câu hỏi thường gặp</p>
+            <p>
+              <a
+                href="mailto:support@smartmeal.ai"
+                className="text-[#529A92] underline"
+              >
+                Góp ý
+              </a>
+            </p>
           </div>
         </div>
       </div>

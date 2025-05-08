@@ -16,8 +16,8 @@ export interface Menu {
 }
 
 export interface MealRequest {
-  startDate: Date
-  endDate: Date
+  startDate: string
+  endDate: string
   target: 'giam-mo' | 'tang-can' | 'duy-tri'
   age: number
   gender: 'men' | 'women'
