@@ -66,6 +66,39 @@ export const login = async ({
   }
 }
 
+export const register = async ({
+  email,
+  password,
+  firstName,
+  phone,
+  lastName,
+  birthDate,
+  gender,
+}: {
+  email: string
+  password: string
+  firstName: string
+  phone: string
+  lastName: string
+  birthDate: string
+  gender: 'men' | 'women'
+}) => {
+  try {
+    const response = await postData('/users/register', {
+      email,
+      password,
+      firstName,
+      phone,
+      lastName,
+      birthDate,
+      gender,
+    })
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 export const getMeals = async (): Promise<
   AxiosResponse<{
     meals: (MealRequest & { suggest: Menu[]; name: string; _id: string })[]

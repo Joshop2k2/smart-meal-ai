@@ -12,7 +12,7 @@ import { activityLevels, targets } from '@/types'
 import { useAuth } from '@/components/AuthContext'
 
 const Page = () => {
-  const [gender, setGender] = useState<'men' | 'women'>('men')
+  const [gender, setGender] = useState<'men' | 'women'>('women')
   const [old, setOld] = useState<number>(23)
   const [weight, setWeight] = useState<number>(65)
   const [height, setHeight] = useState<number>(170)

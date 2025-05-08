@@ -3,3 +3,8 @@ export const validEmail = (email: string) => {
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return reg.test(email)
 }
+
+export const parseDate = (dateString: string) => {
+  const [day, month, year] = dateString.split('/')
+  return new Date(+year, +month - 1, +day)
+}
