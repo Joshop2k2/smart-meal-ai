@@ -56,6 +56,7 @@ const Login = () => {
     <div className="h-screen md:grid md:grid-cols-2">
       <Image
         src="images/login.jpg"
+        alt="Login background"
         className="hidden object-none md:block md:h-full"
       ></Image>
       <div className="h-screen bg-[#DFF3E5] p-10">

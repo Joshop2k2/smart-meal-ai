@@ -31,10 +31,18 @@ const Page = () => {
             </div>
           </div>
 
-          <Image src="/images/boi-roi.jpg" className="w-screen rounded-xl" />
+          <Image
+            src="/images/boi-roi.jpg"
+            alt="Confused person thinking about meal choices"
+            className="w-screen rounded-xl"
+          />
         </div>
         <div className="grid-clos-1 grid py-10 md:grid-cols-2 md:space-x-10">
-          <Image src="/images/meal-ai.webp" className="w-screen rounded-xl" />
+          <Image
+            src="/images/meal-ai.webp"
+            alt="AI meal planning illustration"
+            className="w-screen rounded-xl"
+          />
 
           <div className="flex flex-col justify-center">
             <h2 className="py-4 text-2xl font-bold text-[#097770]">
