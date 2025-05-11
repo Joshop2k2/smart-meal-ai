@@ -4,32 +4,20 @@ import { useState } from 'react'
 import {
   Navbar,
   NavbarBrand,
-  NavbarMenuToggle,
-  NavbarMenuItem,
-  NavbarMenu,
   NavbarContent,
   NavbarItem,
   Link,
 } from '@nextui-org/react'
-import { Bars3Icon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { useAuth } from '@/components/AuthContext'
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const context = useAuth()
 
   return (
     <div className="flex justify-center bg-gradient-to-r from-[#F0F9EE] to-[#F9F9F3]">
       <div className="container">
-        <Navbar
-          isMenuOpen={isMenuOpen}
-          onMenuOpenChange={setIsMenuOpen}
-          onScrollPositionChange={() => {
-            setIsMenuOpen(false)
-          }}
-          className="w-full"
-        >
+        <Navbar className="w-full">
           <NavbarContent className="flex w-full space-x-20 text-[#529A92]">
             <NavbarBrand>
               <Link href="/#">
@@ -40,10 +28,7 @@ const Header = () => {
             </NavbarBrand>
 
             <NavbarContent
-              className={clsx(
-                'my-2 hidden w-full',
-                'md:flex md:justify-between',
-              )}
+              className={clsx('my-2 w-full', 'md:flex md:justify-between')}
             >
               <NavbarContent className="space-x-6">
                 <NavbarItem>
@@ -85,40 +70,6 @@ const Header = () => {
               )}
             </NavbarContent>
           </NavbarContent>
-
-          <NavbarContent
-            className="flex cursor-pointer md:hidden"
-            justify="end"
-          >
-            <NavbarMenuToggle
-              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-              icon={<Bars3Icon className="h-10 w-10" />}
-            >
-              <span className="sr-only"></span>
-            </NavbarMenuToggle>
-          </NavbarContent>
-
-          {isMenuOpen && (
-            <NavbarMenu className="absolute bottom-0 z-40 container w-full bg-amber-50">
-              <NavbarMenuItem>
-                <Link href="gioi-thieu">
-                  <p>Giới thiệu</p>
-                </Link>
-              </NavbarMenuItem>
-              <NavbarMenuItem>
-                <Link href="xay-dung-thuc-don">
-                  <p>Thực đơn thông minh</p>
-                </Link>
-              </NavbarMenuItem>
-              {!context.isLogin && (
-                <NavbarContent>
-                  <Link href="dang-nhap">
-                    <p>Đăng nhập/Đăng ký</p>
-                  </Link>
-                </NavbarContent>
-              )}
-            </NavbarMenu>
-          )}
         </Navbar>
       </div>
     </div>
