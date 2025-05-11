@@ -27,7 +27,6 @@ const Footer = () => {
           </div>
           <div>
             <h2 className="mb-2">HỖ TRỢ KHÁCH HÀNG</h2>
-            <p>Câu hỏi thường gặp</p>
             <p>
               <a
                 href="mailto:support@smartmeal.ai"
