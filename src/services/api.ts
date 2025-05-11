@@ -101,7 +101,7 @@ export const register = async ({
 
 export const getMeals = async (): Promise<
   AxiosResponse<{
-    meals: (MealRequest & { suggest: Menu[]; name: string; _id: string })[]
+    meals: (MealRequest & { suggest: Menu[]; _id: string })[]
   }>
 > => {
   try {
@@ -120,7 +120,7 @@ export const getMeals = async (): Promise<
   }
 }
 export const saveMeal = async (
-  meal: MealRequest & { suggest: Menu[]; name: string },
+  meal: MealRequest & { suggest: Menu[] },
 ): Promise<AxiosResponse<{ message: string }>> => {
   try {
     const token = localStorage.getItem('token')

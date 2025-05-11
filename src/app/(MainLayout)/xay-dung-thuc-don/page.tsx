@@ -11,7 +11,7 @@ import { Menu } from '@/types/menuMeal'
 import { activityLevels, targets } from '@/types'
 import { useAuth } from '@/components/AuthContext'
 import { parseDate, formatDate } from '@/helpers'
-import { toastError } from '@/services/toastify'
+import { toastError, toastSuccess } from '@/services/toastify'
 
 const Page = () => {
   const [gender, setGender] = useState<'men' | 'women'>('women')
@@ -78,10 +78,10 @@ const Page = () => {
         active: active as 1 | 2 | 3 | 4 | 5,
         meal: meal,
         addInfo: addInfo,
-        name: 'test name',
         suggest: menuMeal,
       })
       setIsSave(true)
+      toastSuccess('Lưu thực đơn thành công!')
     } catch (error) {
       console.log('error: ', error)
     }
@@ -160,9 +160,9 @@ const Page = () => {
   return (
     <div className="my-10 flex justify-center">
       <div className="container space-y-10">
-        <div className="grid-clos-1 grid gap-2 space-y-5 md:grid-cols-3 md:space-y-0">
+        <div className="grid-clos-1 -ml-3 grid gap-2 space-y-5 md:grid-cols-3 md:space-y-0">
           <div>
-            <p className={'mb-2 pl-4'}>Ngày bắt đầu</p>
+            <p className={'mb-2 pl-4 text-[#0A7770]'}>NGÀY BẮT ĐẦU</p>
             <Input
               placeholder="Ngày bắt đầu - DD/MM/YYYY"
               value={startDate}
@@ -178,7 +178,7 @@ const Page = () => {
             />
           </div>
           <div>
-            <p className={'mb-2 pl-4'}>Ngày kết thúc</p>
+            <p className={'mb-2 pl-4 text-[#0A7770]'}>NGÀY KẾT THÚC</p>
             <Input
               placeholder="Ngày kết thúc - DD/MM/YYYY"
               value={endDate}

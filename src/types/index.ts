@@ -11,3 +11,8 @@ export const targets = [
   { value: 'tang-can', label: 'Tăng cân' },
   { value: 'duy-tri', label: 'Duy trì' },
 ]
+
+export const gender = {
+  women: 'Nữ',
+  men: 'Nam',
+}
