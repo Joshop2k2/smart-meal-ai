@@ -8,7 +8,7 @@ import Modal from './components/Modal'
 
 const Page = () => {
   const [menuMeal, setMenuMeal] = useState<
-    (MealRequest & { suggest: Menu[]; name: string; _id: string })[] | undefined
+    (MealRequest & { suggest: Menu[]; _id: string })[] | undefined
   >(undefined)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [currentMealSelect, setCurrentMealSelect] = useState<Menu[]>([])

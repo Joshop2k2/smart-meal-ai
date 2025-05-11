@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     return false
   })
-  const [user, setName] = useState(() => {
+  const [user] = useState(() => {
     if (typeof window !== 'undefined') {
       const user = localStorage.getItem('user')
       return user ? JSON.parse(user) : {}

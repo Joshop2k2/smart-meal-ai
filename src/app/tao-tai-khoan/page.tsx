@@ -45,7 +45,7 @@ const Login = () => {
     try {
       setLoading(true)
 
-      const response = await register({
+      await register({
         email,
         password,
         firstName,
