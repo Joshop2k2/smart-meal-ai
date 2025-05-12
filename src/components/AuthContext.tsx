@@ -9,6 +9,8 @@ type AuthContextType = {
   logout: () => void
   user: UserType
   setUser: (user: UserType) => void
+  isAdmin: boolean
+  setIsAdmin: (value: boolean) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -18,6 +20,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token')
       return !!token
+    }
+    return false
+  })
+  const [isAdmin, setIsAdmin] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token')
+      if (token) {
+        const isAdmin = JSON.parse(atob(token.split('.')[1]))?.isAdmin
+        return !!isAdmin
+      }
     }
     return false
   })
@@ -39,7 +51,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLogin, setIsLogin, logout, user, setUser }}
+      value={{
+        isLogin,
+        setIsLogin,
+        logout,
+        user,
+        setUser,
+        isAdmin,
+        setIsAdmin,
+      }}
     >
       {children}
     </AuthContext.Provider>

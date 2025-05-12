@@ -73,6 +73,21 @@ export const login = async ({
   }
 }
 
+export const loginAdmin = async ({
+  email,
+  password,
+}: {
+  email: string
+  password: string
+}): Promise<AxiosResponse<{ token: string; user: UserType }>> => {
+  try {
+    const response = await postData('/users/admin/login', { email, password })
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 export const register = async ({
   email,
   password,
@@ -173,6 +188,30 @@ export const updateUser = async (data: {
     return response
   } catch (error) {
     console.error('Error saving meal:', error)
+    throw error
+  }
+}
+
+export const getAllUser = async (): Promise<
+  AxiosResponse<{
+    users: UserType[]
+  }>
+> => {
+  try {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      throw new Error('No token found in localStorage')
+    }
+
+    const response = await getData(`/users/admin/users`, {
+      authorization: `Bearer ${token}`,
+    })
+
+    console.log('response: ', response)
+
+    return response
+  } catch (error) {
+    console.error('Error fetching meals:', error)
     throw error
   }
 }
