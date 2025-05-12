@@ -1,34 +1,23 @@
 'use client'
 
-import { useState } from 'react'
 import {
   Navbar,
   NavbarBrand,
-  NavbarMenuToggle,
-  NavbarMenuItem,
-  NavbarMenu,
   NavbarContent,
   NavbarItem,
   Link,
 } from '@nextui-org/react'
-import { Bars3Icon } from '@heroicons/react/24/outline'
+import clsx from 'clsx'
+import { useAuth } from '@/components/AuthContext'
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  console.log('isMenuOpen: ', isMenuOpen)
+  const context = useAuth()
 
   return (
     <div className="flex justify-center bg-gradient-to-r from-[#F0F9EE] to-[#F9F9F3]">
       <div className="container">
-        <Navbar
-          isMenuOpen={isMenuOpen}
-          onMenuOpenChange={setIsMenuOpen}
-          onScrollPositionChange={() => {
-            setIsMenuOpen(false)
-          }}
-          className="w-full"
-        >
-          <NavbarContent className="flex space-x-20 text-[#529A92]">
+        <Navbar className="w-full">
+          <NavbarContent className="flex w-full space-x-20 text-[#529A92]">
             <NavbarBrand>
               <Link href="/#">
                 <h2 className="text-2xl font-semibold text-[#0A7770] md:text-3xl">
@@ -37,7 +26,9 @@ const Header = () => {
               </Link>
             </NavbarBrand>
 
-            <NavbarContent className="my-2 hidden md:flex">
+            <NavbarContent
+              className={clsx('my-2 w-full', 'md:flex md:justify-between')}
+            >
               <NavbarContent className="space-x-6">
                 <NavbarItem>
                   <Link href="gioi-thieu">
@@ -49,36 +40,35 @@ const Header = () => {
                     <p>Thực đơn thông minh</p>
                   </Link>
                 </NavbarItem>
+                {context.isLogin && (
+                  <NavbarItem>
+                    <Link href="quan-ly-thuc-don">
+                      <p>Quản lý thực đơn</p>
+                    </Link>
+                  </NavbarItem>
+                )}
               </NavbarContent>
+              {!context.isLogin ? (
+                <NavbarContent>
+                  <Link href="dang-nhap">
+                    <p>Đăng nhập/Đăng ký</p>
+                  </Link>
+                </NavbarContent>
+              ) : (
+                <NavbarContent>
+                  <Link href="thong-tin-ca-nhan">{context.user.firstName}</Link>
+                  <button
+                    onClick={() => {
+                      context.logout()
+                    }}
+                    className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600"
+                  >
+                    Đăng xuất
+                  </button>
+                </NavbarContent>
+              )}
             </NavbarContent>
           </NavbarContent>
-
-          <NavbarContent
-            className="flex cursor-pointer md:hidden"
-            justify="end"
-          >
-            <NavbarMenuToggle
-              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-              icon={<Bars3Icon className="h-10 w-10" />}
-            >
-              <span className="sr-only"></span>
-            </NavbarMenuToggle>
-          </NavbarContent>
-
-          {isMenuOpen && (
-            <NavbarMenu className="absolute bottom-0 z-40 container w-full bg-amber-50">
-              <NavbarMenuItem>
-                <Link href="gioi-thieu">
-                  <p>Giới thiệu</p>
-                </Link>
-              </NavbarMenuItem>
-              <NavbarMenuItem>
-                <Link href="xay-dung-thuc-don">
-                  <p>Thực đơn thông minh</p>
-                </Link>
-              </NavbarMenuItem>
-            </NavbarMenu>
-          )}
         </Navbar>
       </div>
     </div>

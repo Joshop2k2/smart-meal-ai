@@ -23,7 +23,7 @@ const Page = () => {
               <Button
                 className={clsx(
                   'cursor-pointer rounded-full bg-[#0A7770] font-semibold text-[#FFB82E] shadow-lg transition-transform duration-300',
-                  'hover:scale-105 hover:bg-[#086A64]',
+                  'hover:scale-120 hover:bg-[#086A64]',
                 )}
                 onPress={() => {
                   window.location.href = '/xay-dung-thuc-don'
