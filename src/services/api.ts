@@ -6,11 +6,16 @@ import { MealRequest } from '@/types/menuMeal'
 
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
-export const postData = async (endpoint: string, data: unknown) => {
+export const postData = async (
+  endpoint: string,
+  data: unknown,
+  headers?: Record<string, string>,
+) => {
   try {
     const response = await axios.post(`${baseURL}${endpoint}`, data, {
       headers: {
         'Content-Type': 'application/json',
+        ...headers,
       },
       withCredentials: true,
     })
@@ -23,6 +28,7 @@ export const postData = async (endpoint: string, data: unknown) => {
 
 export const getData = async (
   endpoint: string,
+  headers?: Record<string, string>,
   params?: Record<string, unknown>,
 ) => {
   try {
@@ -30,6 +36,7 @@ export const getData = async (
       params,
       headers: {
         'Content-Type': 'application/json',
+        ...headers,
       },
       withCredentials: true,
     })
@@ -111,7 +118,9 @@ export const getMeals = async (): Promise<
     }
 
     const userId = JSON.parse(atob(token.split('.')[1])).id
-    const response = await getData(`/meals/${userId}`)
+    const response = await getData(`/meals/${userId}`, {
+      authorization: `Bearer ${token}`,
+    })
 
     return response
   } catch (error) {
@@ -129,8 +138,37 @@ export const saveMeal = async (
     }
     const userId = JSON.parse(atob(token.split('.')[1])).id
 
-    const response = await postData(`/meals/${userId}`, {
-      ...meal,
+    const response = await postData(
+      `/meals/${userId}`,
+      {
+        ...meal,
+      },
+      {
+        authorization: `Bearer ${token}`,
+      },
+    )
+    return response
+  } catch (error) {
+    console.error('Error saving meal:', error)
+    throw error
+  }
+}
+
+export const updateUser = async (data: {
+  firstName?: string
+  lastName?: string
+  birthDate?: string
+  phone?: string
+}): Promise<AxiosResponse<{ message: string; user: UserType }>> => {
+  try {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      throw new Error('No token found in localStorage')
+    }
+    const userId = JSON.parse(atob(token.split('.')[1])).id
+
+    const response = await postData(`/users/${userId}`, data, {
+      authorization: `Bearer ${token}`,
     })
     return response
   } catch (error) {

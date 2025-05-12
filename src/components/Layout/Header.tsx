@@ -56,7 +56,7 @@ const Header = () => {
                 </NavbarContent>
               ) : (
                 <NavbarContent>
-                  <p>{context.user.firstName}</p>
+                  <Link href="thong-tin-ca-nhan">{context.user.firstName}</Link>
                   <button
                     onClick={() => {
                       context.logout()

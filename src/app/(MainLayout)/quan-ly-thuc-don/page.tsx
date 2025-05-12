@@ -5,6 +5,7 @@ import { Menu, MealRequest } from '@/types/menuMeal'
 import { toastError } from '@/services/toastify'
 import MealCard from './components/MealCard'
 import Modal from './components/Modal'
+import Link from 'next/link'
 
 const Page = () => {
   const [menuMeal, setMenuMeal] = useState<
@@ -18,15 +19,13 @@ const Page = () => {
       const res = await getMeals()
       setMenuMeal(res.data.meals)
     } catch (error) {
-      console.error(error)
+      console.log('error: ', error)
       toastError('Lỗi tải thực đơn...')
     } finally {
     }
   }
   const handleOpenModal = (_id: string) => {
-    console.log('_id: ', _id)
     const suggest = menuMeal?.find((meal) => meal._id === _id)?.suggest
-    console.log('suggest: ', suggest)
 
     setCurrentMealSelect(suggest ?? [])
     setIsOpenModal(true)
@@ -54,6 +53,20 @@ const Page = () => {
               </div>
             ))}
         </div>
+        {menuMeal?.length === 0 && (
+          <div className="flex flex-col items-center justify-center">
+            {' '}
+            <p className="text-[#0A7770]">
+              Bạn chưa chưa có thực đơn nào được lưu.
+            </p>{' '}
+            <Link
+              href="/xay-dung-thuc-don"
+              className="mt-5 cursor-pointer rounded-full bg-[#0A7770] px-3 py-1 font-semibold text-[#FFB82E] shadow-lg"
+            >
+              Tạo thực đơn ngay!
+            </Link>
+          </div>
+        )}
         {isOpenModal && (
           <Modal
             suggest={currentMealSelect}
