@@ -207,11 +207,31 @@ export const getAllUser = async (): Promise<
       authorization: `Bearer ${token}`,
     })
 
-    console.log('response: ', response)
-
     return response
   } catch (error) {
     console.error('Error fetching meals:', error)
+    throw error
+  }
+}
+
+export const deleteUser = async (userId: string) => {
+  try {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      throw new Error('No token found in localStorage')
+    }
+    const response = await axios.delete(
+      `${baseURL}/users/admin/users/${userId}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      },
+    )
+
+    return response
+  } catch (error) {
     throw error
   }
 }
