@@ -13,6 +13,7 @@ const Page = () => {
       toastSuccess('Xoá người dùng thành công')
       setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId))
     } catch (error) {
+      console.log('error: ', error)
       toastError('Xoá người dùng thất bại')
     }
   }
