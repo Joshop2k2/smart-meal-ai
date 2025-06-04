@@ -35,7 +35,7 @@ const Page = () => {
   }
 
   return (
-    <div className="my-10">
+    <div className="my-10 flex justify-center">
       <div className="container w-80 space-y-5">
         {Object.keys(formData).map((key) => (
           <div className="flex flex-col" key={key}>
@@ -58,7 +58,7 @@ const Page = () => {
         ))}
         <Button
           onPress={handleSave}
-          className="mt-4 ml-3 bg-[#0A7770] text-white"
+          className="mt-4 ml-3 w-30 rounded-2xl bg-[#0A7770] text-white"
         >
           Save
         </Button>

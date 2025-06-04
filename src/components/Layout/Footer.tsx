@@ -1,7 +1,10 @@
 'use client'
 import { Link } from '@nextui-org/react'
+import { useAuth } from '@/components/AuthContext'
 
 const Footer = () => {
+  const context = useAuth()
+
   return (
     <footer className="flex justify-center bg-[#F0F9EE] pb-5">
       <div className="container">
@@ -21,9 +24,11 @@ const Footer = () => {
             <Link href="xay-dung-thuc-don">
               <p>Thực đơn thông minh</p>
             </Link>
-            <Link href="quan-ly-thuc-don">
-              <p>Quản lý thực đơn</p>
-            </Link>
+            {context.isLogin && (
+              <Link href="quan-ly-thuc-don">
+                <p>Quản lý thực đơn</p>
+              </Link>
+            )}
           </div>
           <div>
             <h2 className="mb-2">HỖ TRỢ KHÁCH HÀNG</h2>

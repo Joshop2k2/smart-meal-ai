@@ -1,11 +1,10 @@
 'use client'
 
-import { Image, Input, Button, Link } from '@nextui-org/react'
+import { Image, Input, Button } from '@nextui-org/react'
 import { useState } from 'react'
 import { validEmail } from '@/helpers'
-import { login } from '@/services/api'
+import { loginAdmin } from '@/services/api'
 import { toastError } from '@/services/toastify'
-import clsx from 'clsx'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -25,7 +24,7 @@ const Login = () => {
     }
     try {
       setLoading(true)
-      const response = await login({
+      const response = await loginAdmin({
         email,
         password,
       })
@@ -33,7 +32,7 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
       setLoading(false)
 
-      window.location.href = '/'
+      window.location.href = '/admin'
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log(error.message)
@@ -93,33 +92,7 @@ const Login = () => {
               >
                 Đăng nhập
               </Button>
-              <div className="flex items-center">
-                <Link className="font-bold text-white">Quên mật khẩu?</Link>
-              </div>
-            </div>
-            <div className="flex w-80 flex-col items-center justify-center px-4">
-              <p className="mt-10 rounded-sm border border-white px-2 py-1 text-center text-sm text-[#FFB82E]">
-                Tạo tài khoản để quản lý và lưu trữ thực đơn một cách đơn giản
-                hơn.
-              </p>
-              <Link
-                href="/tao-tai-khoan"
-                className={clsx(
-                  'mt-5 flex w-full justify-center rounded-tl-2xl rounded-br-2xl border-2 border-[#0A7770] bg-white px-3 py-1 text-lg font-semibold text-[#0A7770] shadow-2xl',
-                  'hover:bg-[#FFB82E]',
-                )}
-              >
-                TẠO TÀI KHOẢN
-              </Link>
-              <Link
-                href="/#"
-                className={clsx(
-                  'mt-5 flex w-full justify-center rounded-tl-2xl rounded-br-2xl border-2 border-[#0A7770] bg-white px-3 py-1 text-lg font-semibold text-[#0A7770] shadow-2xl',
-                  'hover:bg-[#FFB82E]',
-                )}
-              >
-                QUAY VỀ TRANG CHỦ
-              </Link>
+              <div className="flex items-center"></div>
             </div>
           </div>
         </div>
